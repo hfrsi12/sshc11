@@ -1,23 +1,27 @@
-const nodemailer = require('nodemailer');
+const mailgun = require('mailgun-js');
+
+// إعداد عميل Mailgun
+const mg = mailgun({ apiKey: 'YOUR_MAILGUN_API_KEY', domain: 'YOUR_DOMAIN_NAME' }); // استبدل بمفتاح API ونطاقك
 
 exports.handler = async function(event, context) {
-    let transporter = nodemailer.createTransport({
-        service: 'gmail',
-        auth: {
-            user: 'youremail@gmail.com', // استبدل هذا بالبريد الإلكتروني الخاص بك
-            pass: 'yourpassword'         // استبدل هذا بكلمة مرور البريد الإلكتروني الخاص بك
-        }
-    });
-
-    let info = await transporter.sendMail({
-        from: '"Your Name" <youremail@gmail.com>', // استبدل هذا بالبريد الإلكتروني الخاص بك
-        to: 'admin@example.com', // البريد الإلكتروني الذي تريد إرسال الإشعار إليه
-        subject: 'New Registration',
+    const data = {
+        from: 'your-email@your-domain.com', // عنوان البريد الإلكتروني الذي سترسل منه الرسائل
+        to: 'nwralhb1556@gmail.com', // البريد الإلكتروني الذي ستتلقى الإشعارات عليه
+        subject: 'New Registration Notification',
         text: 'A new user has registered on your site.'
-    });
-
-    return {
-        statusCode: 200,
-        body: JSON.stringify({ message: 'Email sent' })
     };
+
+    try {
+        await mg.messages().send(data);
+        return {
+            statusCode: 200,
+            body: JSON.stringify({ message: 'Email sent successfully' })
+        };
+    } catch (error) {
+        console.error(error);
+        return {
+            statusCode: 500,
+            body: JSON.stringify({ message: 'Error sending email', error: error.message })
+        };
+    }
 }
