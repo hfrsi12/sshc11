@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>موقع الاستثمار</title>
+    <link rel="icon" href="./USDT/index-recharge-icon2-5b8127ee.png">
+    <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+    <!--Header Start-->
+    <header>
+        <div id="navbar">
+            <img src="./USDT/coollogo_com-6418786.png">
+            <nav>
+                <ul>
+                    <li><a href="indexss.html">الرئيسية</a></li>
+                    <li><a href="اتصل.html">اتصل بنا</a></li>
+                    <li><a href="عروض.html">عروض الاستثمار</a></li>
+                    <li><a href="السحب.html">السحب</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    
+    <main>
+        <section id="contact">
+            <h2>اتصل بنا</h2>
+            <form id="my-form" action="https://formspree.io/f/mdknapwp" method="POST">
+                <label for="name">الاسم:</label>
+                <input type="text" id="name" name="name" required>
+                
+                <label for="email">البريد الإلكتروني:</label>
+                <input type="email" id="email" name="email" required>
+                
+                <label for="message">الرسالة:</label>
+                <textarea id="message" name="message" rows="6" required></textarea>
+                
+                <button id="my-form-button" type="submit">إرسال</button>
+                <p id="my-form-status"></p>
+            </form>
+        </section>
+    </main>
+    
+    <footer>
+        <p>جميع الحقوق محفوظة &copy; 2024</p>
+    </footer>
+
+    <script src="./script.js"></script>
+    <script>
+        document.getElementById("my-form").addEventListener("submit", async function(event) {
+            event.preventDefault();
+            var status = document.getElementById("my-form-status");
+            var data = new FormData(event.target);
+            try {
+                let response = await fetch(event.target.action, {
+                    method: event.target.method,
+                    body: data,
+                    headers: { 'Accept': 'application/json' }
+                });
+                if (response.ok) {
+                    status.innerHTML = "تم إرسال رسالتك بنجاح!";
+                    event.target.reset();
+                } else {
+                    let data = await response.json();
+                    if (data.errors) {
+                        status.innerHTML = data.errors.map(error => error.message).join(", ");
+                    } else {
+                        status.innerHTML = "عذراً، حدث خطأ أثناء إرسال رسالتك.";
+                    }
+                }
+            } catch (error) {
+                status.innerHTML = "عذراً، حدث خطأ أثناء إرسال رسالتك.";
+            }
+        });
+    </script>
+</body>
+</html>

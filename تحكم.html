@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحة المسؤول</title>
+    <link rel="stylesheet" href="style.css">
+    <script>
+        async function fetchData(url, elementId) {
+            const response = await fetch(url);
+            const data = await response.json();
+            const container = document.getElementById(elementId);
+
+            if (Array.isArray(data) && data.length > 0) {
+                data.forEach(item => {
+                    const itemElement = document.createElement('div');
+                    itemElement.className = 'data-item';
+                    itemElement.innerHTML = JSON.stringify(item, null, 2);
+                    container.appendChild(itemElement);
+                });
+            } else {
+                container.innerHTML = '<p>لا توجد بيانات لعرضها.</p>';
+            }
+        }
+
+        async function loadAllData() {
+            await fetchData('/activated-offers', 'activated-offers');
+            await fetchData('/pending-deposits', 'pending-deposits');
+            await fetchData('/withdrawal-requests', 'withdrawal-requests');
+        }
+
+        window.onload = loadAllData;
+    </script>
+</head>
+<body>
+    <header>
+        <h1>صفحة المسؤول</h1>
+    </header>
+
+    <main>
+        <section id="pending-deposits">
+            <h2>الإيداعات المعلقة</h2>
+            <!-- سيتم إدراج الإيداعات المعلقة هنا ديناميكيًا -->
+        </section>
+
+        <section id="withdrawal-requests">
+            <h2>طلبات السحب</h2>
+            <!-- سيتم إدراج طلبات السحب هنا ديناميكيًا -->
+        </section>
+
+        <section id="activated-offers">
+            <h2>العروض المفعلة</h2>
+            <!-- سيتم إدراج العروض المفعلة هنا ديناميكيًا -->
+        </section>
+    </main>
+
+    <footer>
+        <p>جميع الحقوق محفوظة &copy; 2024</p>
+    </footer>
+</body>
+</html>
